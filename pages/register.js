@@ -1,8 +1,20 @@
 import Head from 'next/head'
 import Link from 'next/link'
+import { useState } from 'react'
 
 
 const Register = () => {
+
+    const initialState = {name:"", email: "" , password:"", cf_password:""}
+
+    const [userData,setUserData] = useState(initialState)
+    const {name,email,password,cf_password} = userData;
+
+    const handleChangeInput = e => {
+        const {name,value } = e.target;
+        setUserData({...userData, [name]: value})
+    }
+
     return(
         <div>
             <Head>
@@ -14,21 +26,25 @@ const Register = () => {
 
             <div className="f-outline px-2 relative border rounded-lg focus-within:border-indigo-500">
                 <input type="text" name="name" placeholder="Name"
-                    className="block p-2 w-full text-lg appearance-none focus:outline-none bg-transparent" />
+                    className="block p-2 w-full text-lg appearance-none focus:outline-none bg-transparent" 
+                    value={name} onChange={handleChangeInput}/>
             </div>
 
             <div className="f-outline px-2 relative border rounded-lg focus-within:border-indigo-500">
                 <input type="email" name="email" placeholder="Email"
-                    className="block p-2 w-full text-lg appearance-none focus:outline-none bg-transparent" />
+                    className="block p-2 w-full text-lg appearance-none focus:outline-none bg-transparent" 
+                    value={email} onChange={handleChangeInput}/>
             </div>
 
             <div className="f-outline px-2 relative border rounded-lg focus-within:border-indigo-500">
                 <input type="password" name="password" placeholder="Password"
-                    className="block p-2 w-full text-lg appearance-none focus:outline-none bg-transparent" />
+                    className="block p-2 w-full text-lg appearance-none focus:outline-none bg-transparent" 
+                    value={password} onChange={handleChangeInput}/>
             </div>
             <div className="f-outline px-2 relative border rounded-lg focus-within:border-indigo-500">
-                <input type="password" name="cf-password" placeholder="Confirm Password"
-                    className="block p-2 w-full text-lg appearance-none focus:outline-none bg-transparent" />
+                <input type="password" name="cf_password" placeholder="Confirm Password"
+                    className="block p-2 w-full text-lg appearance-none focus:outline-none bg-transparent" 
+                    value={cf_password} onChange={handleChangeInput}/>
             </div>
 
 
