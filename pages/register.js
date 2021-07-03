@@ -1,7 +1,9 @@
 import Head from 'next/head'
 import Link from 'next/link'
-import { useState } from 'react'
-
+import { useState,useContext } from 'react'
+import {DataContext} from '../store/GlobalState'
+import { postData } from '../utils/fetchData'
+import valid from '../utils/valid'
 
 const Register = () => {
 
@@ -10,18 +12,34 @@ const Register = () => {
     const [userData,setUserData] = useState(initialState)
     const {name,email,password,cf_password} = userData;
 
+    const {state,dispatch} = useContext(DataContext)
+
     const handleChangeInput = e => {
         const {name,value } = e.target;
         setUserData({...userData, [name]: value})
     }
 
+    const handleSubmit = async e => {
+        e.preventDefault()
+        const errorMsg = valid(name,email,password,cf_password)
+        if(errorMsg) return dispatch({ type: "NOTIFY",payload: {error: errorMsg}})
+    
+        dispatch({type: "NOTIFY", payload: {loading:true}})
+    
+        const res = await postData('auth/register',userData)
+         console.log(res)
+        if(res.err) return dispatch({ type: "NOTIFY",payload: {error: res.err}})
+        return dispatch({ type: "NOTIFY",payload: {success: res.msg}})
+    }
+    
     return(
         <div>
             <Head>
                 <title>Register</title>
             </Head>
         <div className="mt-2 mb-5 items-center z-10 ">
-        <form className="bg-white max-w-sm mx-auto rounded-xl  overflow-hidden p-6 sm:p-14 space-y-10 border border-r-2 border-indigo-200 ">
+        <form onSubmit={handleSubmit}
+            className="bg-white max-w-sm mx-auto rounded-xl  overflow-hidden p-6 sm:p-14 space-y-10 border border-r-2 border-indigo-200">
             <h2 className="text-4xl font-bold text-center text-indigo-600">Register</h2>
 
             <div className="f-outline px-2 relative border rounded-lg focus-within:border-indigo-500">
