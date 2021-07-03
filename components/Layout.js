@@ -5,7 +5,7 @@ import Header from './Header'
 
 function Layout({children}) {
     return (
-        <div className="bg-gray-100 h-screen">
+        <div className="bg-gray-100 min-h-screen">
         <Head>
                 <title>Ecommerce</title>
         </Head>
