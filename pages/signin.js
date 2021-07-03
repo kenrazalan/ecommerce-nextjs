@@ -3,6 +3,19 @@ import Link from 'next/link'
 import { useState,useContext, useEffect } from 'react'
 
 const Signin = () => {
+
+
+    const initialState = { email: "" , password:""}
+
+    const [userData,setUserData] = useState(initialState)
+    const {email,password} = userData;
+
+    const handleChangeInput = e => {
+        const {name,value } = e.target;
+        setUserData({...userData, [name]: value})
+      }
+
+
     return(
     <div className="relative flex items-center justify-center py-2 bg-no-repeat bg-cover">
         <Head>
@@ -13,15 +26,15 @@ const Signin = () => {
             <h2 className="text-4xl font-bold text-center text-indigo-600">Login</h2>
             <div className="f-outline px-2 relative border rounded-lg focus-within:border-indigo-500">
                 <input type="email" name="email" placeholder="Email"
-                    className="block p-2 w-full text-lg appearance-none focus:outline-none bg-transparent" />
-                {/* <label for="email"
-                    className="absolute ml-5 top-0 text-lg text-gray-700 bg-white mt-2 -z-1 duration-300 origin-0">Email</label> */}
+                    className="block p-2 w-full text-lg appearance-none focus:outline-none bg-transparent" 
+                    value={email} onChange={handleChangeInput}/>
+              
             </div>
             <div className="f-outline px-2 relative border rounded-lg focus-within:border-indigo-500">
                 <input type="password" name="password" placeholder="Password"
-                    className="block p-2 w-full text-lg appearance-none focus:outline-none bg-transparent" />
-                {/* <label for="password"
-                    className="absolute ml-5 top-0 text-lg text-gray-700 bg-white mt-2 -z-1 duration-300 origin-0">Password</label> */}
+                    className="block p-2 w-full text-lg appearance-none focus:outline-none bg-transparent" 
+                    value={password} onChange={handleChangeInput}/>
+                
             </div>
             <div className="block mt-2">
                 <label for="" className="flex items-center">
