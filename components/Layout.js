@@ -1,7 +1,7 @@
 import React from 'react'
 import Head from 'next/head'
 import Header from './Header'
-
+import Notify from './Notify'
 
 function Layout({children}) {
     return (
@@ -10,6 +10,7 @@ function Layout({children}) {
                 <title>Ecommerce</title>
         </Head>
         <Header/>
+        <Notify/>
             {children}
         </div>
     )
