@@ -1,6 +1,10 @@
 import Head from 'next/head'
 import Link from 'next/link'
+import {useRouter} from 'next/router'
 import { useState,useContext, useEffect } from 'react'
+import { DataContext } from '../store/GlobalState'
+import { postData } from '../utils/fetchData'
+import Cookie from 'js-cookie'
 
 const Signin = () => {
 
@@ -9,11 +13,41 @@ const Signin = () => {
 
     const [userData,setUserData] = useState(initialState)
     const {email,password} = userData;
+    const router = useRouter()
+
+    const {state,dispatch} = useContext(DataContext)
+    const {auth} = state
 
     const handleChangeInput = e => {
         const {name,value } = e.target;
         setUserData({...userData, [name]: value})
+        dispatch({type: "NOTIFY", payload: {}})
+    }
+    const handleSubmit = async e => {
+        e.preventDefault()
+    
+        dispatch({type: "NOTIFY", payload: {loading:true}})
+    
+        const res = await postData('auth/login',userData)
+        console.log(res)
+        if(res.err) return dispatch({ type: "NOTIFY",payload: {error: res.err}})
+  
+        dispatch({ type: "NOTIFY",payload: {success: res.msg}})
+  
+        dispatch({ type: "AUTH",payload: {
+            token: res.access_token,
+            user: res.user
+        }})
+  
+        Cookie.set('refreshtoken', res.refresh_token, {
+            path: 'api/auth/accessToken',
+            expires: 7
+        })
+        localStorage.setItem('firstLogin',true)  
       }
+    useEffect(() => {
+        if(Object.keys(auth).length !==0 ) router.push('/')
+    },[auth])
 
 
     return(
@@ -22,7 +56,8 @@ const Signin = () => {
             <title>Signin</title>
         </Head>
     <div className="mt-2 items-center z-10 ">
-        <form className="bg-white max-w-sm mx-auto rounded-xl overflow-hidden p-6 sm:p-14 space-y-10 border border-r-2 border-indigo-200 ">
+        <form onSubmit={handleSubmit}
+            className="bg-white max-w-sm mx-auto rounded-xl overflow-hidden p-6 sm:p-14 space-y-10 border border-r-2 border-indigo-200 ">
             <h2 className="text-4xl font-bold text-center text-indigo-600">Login</h2>
             <div className="f-outline px-2 relative border rounded-lg focus-within:border-indigo-500">
                 <input type="email" name="email" placeholder="Email"
