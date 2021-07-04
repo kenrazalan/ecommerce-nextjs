@@ -7,7 +7,7 @@ export default function Home(props) {
 
   const [products,setProducts] = useState(props.productProps)
   return (
-    <div className="grid grid-cols-3 justify-center">
+    <div className="grid grid-cols-3 justify-center product">
       <Head>
         <title>Home</title>
       </Head>

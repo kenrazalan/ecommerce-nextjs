@@ -19,11 +19,11 @@ const ProductItem = ({product}) => {
     }
     return(
 
-<div className="flex justify-center">
+<div className="flex justify-center m-5">
   {/* <div className="absolute opacity-80 inset-0 z-0"></div> */}
-  <div className="relative min-h-screen flex flex-col items-center justify-center ">
+  <div className="relative min-h-screen flex flex-col items-center justify-center">
     <div className="container">
-      <div className="max-w-xs w-full bg-gray-900 shadow-lg rounded-xl p-6">
+      <div className="max-w-xs w-full bg-gray-900 shadow-lg rounded-xl p-5 ">
         <div className="flex flex-col">
           <div className="">
             <div className="relative h-62 w-full mb-3">
@@ -51,9 +51,11 @@ const ProductItem = ({product}) => {
               <div className="lg:flex  py-4  text-sm text-gray-600">
               </div>
               <div className="flex space-x-2 text-sm font-medium justify-between">
-                <button className="transition ease-in duration-300 inline-flex items-center text-sm font-medium mb-2 md:mb-0 bg-purple-500 px-5 py-2 hover:shadow-lg tracking-wider text-white rounded-full hover:bg-purple-600">
-                  <span>View</span>
-                </button>
+                <Link href={`product/${product._id}`}>
+                    <button  className="transition ease-in duration-300 inline-flex items-center text-sm font-medium mb-2 md:mb-0 bg-purple-500 px-5 py-2 hover:shadow-lg tracking-wider text-white rounded-full hover:bg-purple-600">
+                    <span>View</span>
+                    </button>
+                </Link>
                 <button className="transition ease-in duration-300 inline-flex items-center text-sm font-medium mb-2 md:mb-0 bg-green-400 px-5 py-2 hover:shadow-lg tracking-wider text-white rounded-full hover:bg-purple-600">
                   <span>Buy</span>
                 </button>
