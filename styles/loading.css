@@ -22,3 +22,7 @@
 @keyframes dash{
     to{stroke-dashoffset: 234}
 }
+
+img{
+    object-position: 0 30%;
+}
