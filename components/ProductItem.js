@@ -19,9 +19,9 @@ const ProductItem = ({product}) => {
     }
     return(
 
-<div className="flex justify-center m-5">
+<div className="flex justify-center m-8">
   {/* <div className="absolute opacity-80 inset-0 z-0"></div> */}
-  <div className="relative min-h-screen flex flex-col items-center justify-center">
+  <div className="relative flex flex-col items-center justify-center">
     <div className="container">
       <div className="max-w-xs w-full bg-gray-900 shadow-lg rounded-xl p-5 ">
         <div className="flex flex-col">
