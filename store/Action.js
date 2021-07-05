@@ -9,7 +9,7 @@ export const addToCart = (product,cart) => {
     return ({ type: "NOTIFY", payload: {error: 'This product is out of stock.'}})
 
     const check = cart.every( item => {
-        return item._id == product._id
+        return item._id !== product._id
     })
 
     if(!check) return  ({ type: "NOTIFY", payload: {error: 'This product has been added to cart.'}})
