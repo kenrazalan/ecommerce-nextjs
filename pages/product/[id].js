@@ -1,11 +1,15 @@
-import {useState} from 'react'
+import {useContext, useState} from 'react'
 import Head from 'next/head'
 import { getData} from '../../utils/fetchData'
+import { DataContext } from '../../store/GlobalState'
+import { addToCart } from '../../store/Action'
 
 const DetailProduct = (props) => {
     const [product ] = useState(props.product)
     const [tab,setTab] = useState(0)
- 
+    const {state,dispatch} = useContext(DataContext)
+
+    const {cart} = state
 
     const isActive = (index) => {
         if(tab === index) return "active";
@@ -44,8 +48,13 @@ const DetailProduct = (props) => {
                 <div className="my-2">{product.description}</div>
                 <div className="my-2">{product.content}</div>
                 <div className="flex mt-8">
-                    <button type="button" 
-                    className="transition ease-in duration-300 inline-flex items-center text-sm font-medium mb-2 md:mb-0 bg-purple-500 px-8 py-2 hover:shadow-lg tracking-wider text-white rounded-full hover:bg-purple-600">
+                    <button 
+                    onClick={() => {
+                        dispatch(addToCart(product,cart))
+                      }}
+                    type="button" 
+                    disabled={product.inStock === 0 ? true : false}
+                    className={`${product.inStock === 0 && 'opacity-50 hover:bg-purple-500'} transition ease-in duration-300 inline-flex items-center text-sm font-medium mb-2 md:mb-0 bg-purple-500 px-8 py-2 hover:shadow-lg tracking-wider text-white rounded-full hover:bg-purple-600`}>
                         Buy
                     </button>
                 </div>
