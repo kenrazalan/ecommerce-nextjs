@@ -1,7 +1,11 @@
 import Link from 'next/link'
+import { useContext } from 'react'
+import { addToCart } from '../store/Action'
+import { DataContext } from '../store/GlobalState'
 
 const ProductItem = ({product}) => {
-    console.log(product)
+    const {state,dispatch} = useContext(DataContext)
+    const {cart} = state
 
     const userLink = () => {
         return(
@@ -11,7 +15,8 @@ const ProductItem = ({product}) => {
                         style={{marginRight:"5px"}}>View</a>
                 </Link>
                 <button className="btn btn-success ml-1 flex-fill"
-                    style={{marginLeft:"5px"}}>
+                    style={{marginLeft:"5px"}}
+                    >
                     BUY
                 </button>
             </>
@@ -41,7 +46,8 @@ const ProductItem = ({product}) => {
                 <div className="text-xl text-white font-semibold mt-1">₱ {product.price}.00</div>
                   
                   <div className="flex items-center  text-white text-sm ">
-                    IN STOCK: <span className="bg-green-400 px-2 py-1 ml-3 rounded-lg">{product.inStock}</span> 
+                    {product.inStock === 0 ? <div className="bg-red-500 px-2 py-1 ml-3 rounded-lg">Out of Stock</div> 
+                    :<div> IN STOCK: <span className="bg-green-400 px-2 py-1 ml-3 rounded-lg">{product.inStock}</span> </div> }
                   </div>
                 </div>
               </div>
@@ -56,7 +62,11 @@ const ProductItem = ({product}) => {
                     <span>View</span>
                     </button>
                 </Link>
-                <button className="transition ease-in duration-300 inline-flex items-center text-sm font-medium mb-2 md:mb-0 bg-green-400 px-5 py-2 hover:shadow-lg tracking-wider text-white rounded-full hover:bg-purple-600">
+                <button disabled={product.inStock === 0 ? true : false}
+                 className={`${product.inStock === 0 && 'opacity-50 hover:bg-green-400' } transition ease-in duration-300 inline-flex items-center text-sm font-medium mb-2 md:mb-0 bg-green-400 px-5 py-2 hover:shadow-lg tracking-wider text-white rounded-full hover:bg-purple-600`}
+                 onClick={() => {
+                  dispatch(addToCart(product,cart))
+                }}>
                   <span>Buy</span>
                 </button>
 
