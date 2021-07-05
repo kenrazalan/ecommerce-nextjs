@@ -8,7 +8,7 @@ import Cookies from 'js-cookie'
 function Header() {
     const router = useRouter()
     const {state,dispatch} = useContext(DataContext)
-    const {auth} = state  
+    const {auth, cart} = state  
 
     const handleLogout = () => {
         Cookies.remove('refreshtoken', {path: 'api/auth/accessToken'})
@@ -18,12 +18,12 @@ function Header() {
     }
     const loggedRouter = () => (
         <>
-        <img src={auth.user.avatar} alt="profile" 
+        <img className="cursor-pointer" src={auth.user.avatar} alt="profile" 
         style={{width:"30px",height:"30px",borderRadius:"50%" ,marginRight:"5px"}} />
-        {auth.user.name}
+        <span className="cursor-pointer">{auth.user.name}</span>
         <li className="nav-item">
           <Link href="#">
-            <a className="nav-link" >Profile</a>      
+            <a className="nav-link cursor-pointer" >Profile</a>      
           </Link>
         </li>
         <li className="nav-item">
@@ -37,17 +37,20 @@ function Header() {
 return (
     <div className="sticky top-0 z-50 bg-white flex items-center p-2 lg:p-5 shadow-sm justify-between">
         <div className="flex items-center">
-            <p>Header</p>
+          <Link href="/">
+            <p className="pointer">Header</p>
+          </Link>
+            
         </div>
 
         <div className="justify-center">
             <ul className="flex space-x-6">
-                <li>Cart</li>
+                <li className="cursor-pointer">Cart <span>{cart.length}</span></li>
         {
           Object.keys(auth).length === 0 ? 
 
                 <Link href="/signin">
-                  <li>Login</li>      
+                  <li className="cursor-pointer">Login</li>      
                 </Link>
           :
           loggedRouter()
