@@ -1,24 +1,33 @@
 import Link from "next/link"
+import { useState } from "react"
 import { decrease, increase } from "../store/Action"
+import Modal from "./Modal"
 
 
 const CartItem = ({item,dispatch,cart}) => {
+    const [toggle,setToggle] = useState(false)
     console.log(item)
     return(
-
+        <>
+        {
+            toggle && (
+                 <Modal toggle={toggle} setToggle={setToggle} item={item} cart={cart}/>
+            )
+        }
+       
         <tr>
-            <td class="px-6 py-4 whitespace-nowrap">
-                <div class="flex items-center">
-                <div class="flex-shrink-0 h-10 w-10">
-                    <img class="h-10 w-10 rounded-full" src={item.images[0].url} alt={item.name}/>
+            <td className="px-6 py-4 whitespace-nowrap">
+                <div className="flex items-center">
+                <div className="flex-shrink-0 h-10 w-10">
+                    <img className="h-10 w-10 rounded-full" src={item.images[0].url} alt={item.name}/>
                 </div>
-                <div class="ml-4">
-                    <div class="text-sm font-medium text-gray-900">
+                <div className="ml-4">
+                    <div className="text-sm font-medium text-gray-900">
                     <Link href={`/product/${item._id}`}>
                          {item.title}
                     </Link>
                     </div>
-                    <div class="text-sm text-gray-500">
+                    <div className="text-sm text-gray-500">
                         {item.inStock > 0 
                         ? <p className=" text-red-500">In Stock: {item.inStock}</p>
                         : <p className="text-red-500">Out of Stock</p>
@@ -27,11 +36,11 @@ const CartItem = ({item,dispatch,cart}) => {
                 </div>
                 </div>
             </td>
-            <td class="px-6 py-4 whitespace-nowrap">
+            <td className="px-6 py-4 whitespace-nowrap">
                 {/* <div class="text-sm text-gray-900">Regional Paradigm Technician</div>
                 <div class="text-sm text-gray-500">Optimization</div> */}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap">
+            <td className="px-6 py-4 whitespace-nowrap">
                 {/* <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                 Active
                 </span> */}
@@ -51,14 +60,14 @@ const CartItem = ({item,dispatch,cart}) => {
                     </button>
                 </div>
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 ₱ {item.price}.00
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <a href="#" class="text-indigo-600 hover:text-indigo-900">X</a>
+            <td  className="cursor-pointer px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <a onClick={() => setToggle(!toggle)} className=" p-3 text-indigo-600 hover:text-indigo-900">X</a>
             </td>
         </tr>
-    
+        </>
     )
 }
 
