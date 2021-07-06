@@ -39,8 +39,8 @@ const Register = () => {
             </Head>
         <div className="mt-2 mb-5 items-center z-10 ">
         <form onSubmit={handleSubmit}
-            className="bg-white max-w-sm mx-auto rounded-xl  overflow-hidden p-6 sm:p-14 space-y-10 border border-r-2 border-indigo-200">
-            <h2 className="text-4xl font-bold text-center text-indigo-600">Register</h2>
+            className="bg-white max-w-sm mx-auto rounded-xl  overflow-hidden p-6 sm:p-14 space-y-5 border border-r-2 border-indigo-200">
+            <h2 className="text-4xl font-bold text-center text-gray-600">Register</h2>
 
             <div className="f-outline px-2 relative border rounded-lg focus-within:border-indigo-500">
                 <input type="text" name="name" placeholder="Name"

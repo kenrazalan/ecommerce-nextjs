@@ -1,4 +1,4 @@
-import React,{useContext} from 'react'
+import React,{useContext, useEffect, useState} from 'react'
 import Link from 'next/link'
 import {useRouter} from 'next/router'
 import { DataContext } from '../store/GlobalState'
@@ -38,14 +38,16 @@ return (
     <div className="sticky top-0 z-50 bg-white flex items-center p-2 lg:p-5 shadow-sm justify-between">
         <div className="flex items-center">
           <Link href="/">
-            <p className="pointer">Header</p>
+            <p className="cursor-pointer">Header</p>
           </Link>
             
         </div>
 
         <div className="justify-center">
             <ul className="flex space-x-6">
+            <Link href="/cart">
                 <li className="cursor-pointer">Cart <span>{cart.length}</span></li>
+              </Link>
         {
           Object.keys(auth).length === 0 ? 
 

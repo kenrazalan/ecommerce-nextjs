@@ -16,12 +16,12 @@ const Signin = () => {
     const router = useRouter()
 
     const {state,dispatch} = useContext(DataContext)
-    const {auth} = state
+    const { auth,notify} = state
 
     const handleChangeInput = e => {
         const {name,value } = e.target;
         setUserData({...userData, [name]: value})
-        dispatch({type: "NOTIFY", payload: {}})
+        //dispatch({type: "NOTIFY", payload: {}})
     }
     const handleSubmit = async e => {
         e.preventDefault()
@@ -58,7 +58,7 @@ const Signin = () => {
     <div className="mt-2 items-center z-10 ">
         <form onSubmit={handleSubmit}
             className="bg-white max-w-sm mx-auto rounded-xl overflow-hidden p-6 sm:p-14 space-y-10 border border-r-2 border-indigo-200 ">
-            <h2 className="text-4xl font-bold text-center text-indigo-600">Login</h2>
+            <h2 className="text-4xl font-bold text-center text-gray-600">Login</h2>
             <div className="f-outline px-2 relative border rounded-lg focus-within:border-indigo-500">
                 <input type="email" name="email" placeholder="Email"
                     className="block p-2 w-full text-lg appearance-none focus:outline-none bg-transparent" 
@@ -71,7 +71,7 @@ const Signin = () => {
                     value={password} onChange={handleChangeInput}/>
                 
             </div>
-            <div className="block mt-2">
+            <div className="block">
                 <label for="" className="flex items-center">
                     <input type="checkbox"
                         className="ml-2 rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
@@ -79,7 +79,7 @@ const Signin = () => {
                     <span className="ml-2 text-sm text-gray-600">Remember me</span>
                 </label>
             </div>
-            <div className="flex items-center justify-end mt-4">
+            <div className="flex items-center justify-end">
                 <a className="underline text-sm text-gray-600 hover:text-gray-900" href="/register">
                     Dont have an account?
                 </a>
@@ -88,6 +88,9 @@ const Signin = () => {
                     Log in
                 </button>
             </div>
+            {notify.error && <div className="text-red-500 text-center bg-red-100 p-2">{notify.error}</div>}
+            
+           
         </form>
     </div>
     </div>
