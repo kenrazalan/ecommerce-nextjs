@@ -4,12 +4,16 @@ import { useContext, useEffect, useState } from "react";
 import CartItem from "../components/CartItem";
 import { DataContext } from "../store/GlobalState";
 import { getData } from "../utils/fetchData";
+import PaypalBtn from "./paypalBtn";
 
 const Cart = () => {
     const {state,dispatch} = useContext(DataContext)
     const { cart,auth } = state
 
     const [total,setTotal] = useState(0)
+    const [address,setAddress] = useState('')
+    const [mobile,setMobile] = useState('')
+    const [payment,setPayment] = useState(false)
 
     useEffect(() => {
       const getTotal = () => {
@@ -40,6 +44,11 @@ const Cart = () => {
             updateCart()
         }
     },[])
+
+    const handlePayment = () => {
+        if(!address || !mobile) return dispatch({type:"NOTIFY", payload: {error: "Please add address and mobile number."}})
+        setPayment(true)
+    }
 
     if(cart.length === 0 ) return<div className="flex justify-center "><img className="w-96 h-96" src="box.svg" alt="not empty"/></div> 
     return(
@@ -88,12 +97,37 @@ const Cart = () => {
         </div>
 
         <div className="flex items-center justify-end m-10">
+            <form>
+                <h2>Shipping</h2>
+
+                <div className="f-outline px-2 relative border rounded-lg focus-within:border-indigo-500">
+                <input type="text" name="address" placeholder="Address"
+                    className="block p-2 w-full text-lg appearance-none focus:outline-none bg-transparent" 
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)} />
+                </div>
+
+                <div className="f-outline px-2 relative border rounded-lg focus-within:border-indigo-500">
+                <input type="text" name="mobile" placeholder="Mobile Number"
+                    className="block p-2 w-full text-lg appearance-none focus:outline-none bg-transparent" 
+                    value={mobile} 
+                    onChange={(e) => setMobile(e.target.value)} />
+                </div>
+
+            </form>
             <div className="mx-10 text-xl">Total: ${total}.00</div>
-            <Link href={auth.user ? '#': '/signin'}>
-            <button className="transition ease-in duration-300 inline-flex items-center text-sm font-medium mb-2 md:mb-0 bg-green-500 px-5 py-2 hover:shadow-lg tracking-wider text-white rounded-full hover:bg-green-600">
-                Checkout
-            </button> 
-            </Link>                 
+            {
+                payment 
+                ? <PaypalBtn total={total} address={address} mobile={mobile} state={state} dispatch={dispatch}/>
+                : <Link href={auth.user ? '#!': '/signin'}>
+                    <button onClick={handlePayment} className="transition ease-in duration-300 inline-flex items-center text-sm font-medium mb-2 md:mb-0 bg-green-500 px-5 py-2 hover:shadow-lg tracking-wider text-white rounded-full hover:bg-green-600">
+                        Checkout
+                    </button> 
+                  </Link>      
+
+            }
+
+              
         </div>
 
         </div>
