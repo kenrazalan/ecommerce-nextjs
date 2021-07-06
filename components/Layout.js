@@ -4,13 +4,14 @@ import Header from './Header'
 import Notify from './Notify'
 
 function Layout({children}) {
+
     return (
         <div className="bg-gray-100 min-h-screen">
         <Head>
                 <title>Ecommerce</title>
         </Head>
         <Header/>
-        <Notify/>
+        {/* <Notify/> */}
             {children}
         </div>
     )
