@@ -3,4 +3,6 @@
 .product {
     grid-template-columns: repeat(auto-fill,minmax(390px,1fr));
 }
-
+.avatar:hover span{
+    bottom: 0;
+}
