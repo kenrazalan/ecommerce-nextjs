@@ -2,6 +2,7 @@ import Head from "next/head"
 import { useContext, useEffect, useState } from "react"
 import { DataContext } from "../store/GlobalState"
 import { patchData } from "../utils/fetchData"
+import ImageUpload from "../utils/imageUpload"
 import valid from '../utils/valid'
 
 
@@ -29,24 +30,48 @@ const Profile = () => {
         e.preventDefault()
         if(password){
             const errMsg = valid(name, auth.user.email, password, newPassword)
-            if(errMsg) return alert(errMsg)
-            //return dispatch({type: 'NOTIFY', payload: {error: errMsg}})
+            if(errMsg)return dispatch({type: 'NOTIFY', payload: {error: errMsg}})
             updatePassword()
         }
+        if(name !== auth.user.name || avatar) updateInfo()
         
+    }
+    const updateInfo = async () =>{
+        let media;
+        dispatch({ type:'NOTIFY', payload: {loading: true}})
+        if(avatar) media = await ImageUpload([avatar])
+
+        patchData('user', {
+            name, avatar: avatar ? media[0].url : auth.user.avatar
+        } ,auth.token).then( res => {
+            if(res.err) return dispatch({ type:'NOTIFY', payload: {error: res.err}})
+            dispatch({ type:'AUTH', payload: {
+                token: auth.token,
+                user: res.user
+            }})
+            return dispatch({ type:'NOTIFY', payload: {success: res.msg}})
+        })
     }
     const updatePassword = () => {
         dispatch({type: 'NOTIFY', payload: {loading: true}})
         patchData('user/resetPassword', {password}, auth.token)
         .then(res => {
-            if(res.err) return alert(res.err)
-            return alert(res.msg)
-            
-            //return dispatch({type: 'NOTIFY', payload: {error: res.msg}})
-            //return dispatch({type: 'NOTIFY', payload: {success: res.msg}})
+            if(res.err) return dispatch({type: 'NOTIFY', payload: {error: res.msg}})
+            return dispatch({type: 'NOTIFY', payload: {success: res.msg}})
         })
     }
+    const changeProfile = (e) => {
+        const file = e.target.files[0]
+        if(!file) return dispatch({type:'NOTIFY', payload: {error: 'File does not exist.'}})
 
+        if(file.size > 2048 * 2048) //2mb  
+        return dispatch({type:'NOTIFY', payload: {error: 'The largest image size is 1mb.'}})
+
+        // if(file.type !== "image/jpeg" && "image/png") 
+        // return dispatch({type:'NOTIFY', payload: {error: 'Image format does not supported.'}})
+
+        setInput({...input,avatar: file})
+    }
     if(!auth.user) return null
 
     return(
@@ -62,12 +87,14 @@ const Profile = () => {
                 </div>
                 <div className="flex justify-center items-center">
                     <div className="relative w-44 h-44 overflow-hidden avatar">
-                        <img className=" border-2 rounded-full w-full h-full block" src={auth.user.avatar} alt={auth.user.avatar}/>
+                        <img className=" border-2 rounded-full w-full h-full block" 
+                        src={avatar ?URL.createObjectURL(avatar) : auth.user.avatar} alt="profile"/>
                         <span className="flex justify-center absolute bottom-[100%] left-0 w-full h-[50%] bg-[#fff8]
                             text-center font-normal uppercase text-red-500 transition duration-500 ease-in-out">
                             <img className="h-10 w-10 opacity-50" src="camera.svg" alt="camera"/>
                             {/* <p>Change</p> */}
-                            <input className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer" type="file" name="file" id="file_up"/>
+                            <input className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer" type="file" name="file" id="file_up"
+                                    onChange={changeProfile} accept="image/*"/>
                         </span>
                     </div>
                 </div>
