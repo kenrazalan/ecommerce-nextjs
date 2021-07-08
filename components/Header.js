@@ -22,7 +22,7 @@ function Header() {
         style={{width:"30px",height:"30px",borderRadius:"50%" ,marginRight:"5px"}} />
         <span className="cursor-pointer">{auth.user.name}</span>
         <li className="nav-item">
-          <Link href="#">
+          <Link href="/profile">
             <a className="nav-link cursor-pointer" >Profile</a>      
           </Link>
         </li>
