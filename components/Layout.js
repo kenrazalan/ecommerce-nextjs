@@ -11,7 +11,7 @@ function Layout({children}) {
                 <title>Ecommerce</title>
         </Head>
         <Header/>
-        {/* <Notify/> */}
+        <Notify/>
             {children}
         </div>
     )
