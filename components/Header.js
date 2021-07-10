@@ -27,6 +27,11 @@ function Header() {
           </Link>
         </li>
         <li className="nav-item">
+          <Link href="/orders">
+            <a className="nav-link cursor-pointer" >Orders</a>      
+          </Link>
+        </li>
+        <li className="nav-item">
           <Link href="#">
             <button className="nav-link" onClick={handleLogout}>Logout</button>      
           </Link>
