@@ -26,7 +26,12 @@ const paypalBtn = ({total,address,mobile,state,dispatch}) => {
                     if(res.err) return dispatch({ type: "NOTIFY", payload: {err: res.err}})
                     dispatch({ type: "ADD_CART", payload: []})
 
-                    dispatch({ type: "ADD_ORDERS", payload: [...orders,res.newOrder]})
+                    const newOrder = {
+                      ...res.newOrder,
+                      user: auth.user
+                    }
+
+                    dispatch({ type: "ADD_ORDERS", payload: [...orders, newOrder]})
                     return dispatch({ type: "NOTIFY", payload: {success: res.msg}})
                 })
                 // This function shows a transaction success message to your buyer.
