@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { useContext, useEffect, useState } from "react";
 import { DataContext } from "../../store/GlobalState";
 
+
 const orders = () => {
 
     const {state,dispatch} = useContext(DataContext)
@@ -33,7 +34,7 @@ const orders = () => {
                             Delivered
                         </th>
                         <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Action
+                            Paid
                         </th>
                         </tr>
                     </thead>
@@ -56,7 +57,7 @@ const orders = () => {
                                         {item.delivered ? <p>Yes</p> : <p>No</p>}
                                     </td>   
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {item._id}
+                                        {item.paid ? <p>Paid</p> : <p>Not Paid</p>}
                                     </td>
                                 </tr>
                             ))}

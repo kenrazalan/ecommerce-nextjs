@@ -48,7 +48,7 @@ const createOrder = async (req,res) => {
         })
         await newOrder.save()
         res.json({
-            msg: 'Payment Success.',
+            msg: 'Order Success.',
             newOrder
         })
     }catch(err){
