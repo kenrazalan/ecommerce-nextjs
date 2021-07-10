@@ -1,8 +1,7 @@
 import Head from "next/head";
 import Link from 'next/link'
 import { useContext, useEffect, useState } from "react";
-import CartItem from "../components/CartItem";
-import { DataContext } from "../store/GlobalState";
+import { DataContext } from "../../store/GlobalState";
 
 const orders = () => {
 
@@ -41,10 +40,12 @@ const orders = () => {
                     <tbody className="bg-white divide-y divide-gray-200">
 
                             {orders.map(item => (
-                                <tr>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <tr key={item._id}>
+                                    <Link href={`/orders/${item._id}`}> 
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 cursor-pointer">
                                         {item._id}
                                     </td>
+                                    </Link>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                         {new Date(item.createdAt).toLocaleDateString()}
                                     </td>
