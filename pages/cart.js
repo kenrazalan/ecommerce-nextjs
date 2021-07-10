@@ -3,17 +3,19 @@ import Link from 'next/link'
 import { useContext, useEffect, useState } from "react";
 import CartItem from "../components/CartItem";
 import { DataContext } from "../store/GlobalState";
-import { getData } from "../utils/fetchData";
-import PaypalBtn from "./paypalBtn";
+import { getData, postData } from "../utils/fetchData";
+import {useRouter} from 'next/router'
 
 const Cart = () => {
     const {state,dispatch} = useContext(DataContext)
-    const { cart,auth } = state
+    const { cart,auth,orders } = state
 
     const [total,setTotal] = useState(0)
     const [address,setAddress] = useState('')
     const [mobile,setMobile] = useState('')
     const [payment,setPayment] = useState(false)
+    const [callBack,setCallBack] = useState(false)
+    const router = useRouter()
 
     useEffect(() => {
       const getTotal = () => {
@@ -43,11 +45,37 @@ const Cart = () => {
             }
             updateCart()
         }
-    },[])
+    },[callBack])
 
-    const handlePayment = () => {
+    const handlePayment = async() => {
         if(!address || !mobile) return dispatch({type:"NOTIFY", payload: {error: "Please add address and mobile number."}})
-        setPayment(true)
+        let newCart = [];
+         for(const item of cart){
+             const res = await getData(`product/${item._id}`)
+             if(res.product.inStock - item.quantity >= 0){
+                 newCart.push(item)
+             }
+         }
+         if(newCart.length < cart.length){
+             setCallBack(!callBack)
+             return dispatch({type:"NOTIFY", payload: {error: "The product is out of stock or the quantity is insufficient."}})
+         }
+         dispatch({type:"NOTIFY", payload: {loading: true}})
+
+         postData('order', {address, mobile, cart, total}, auth.token)
+         .then(res => {
+             if(res.err) return dispatch({ type: "NOTIFY", payload: {err: res.err}})
+             dispatch({ type: "ADD_CART", payload: []})
+
+             const newOrder = {
+               ...res.newOrder,
+               user: auth.user
+             }
+
+             dispatch({ type: "ADD_ORDERS", payload: [...orders, newOrder]})
+             dispatch({ type: "NOTIFY", payload: {success: res.msg}})
+             return router.push(`/orders/${res.newOrder._id}`)
+         })
     }
 
     if(cart.length === 0 ) return<div className="flex justify-center "><img className="w-96 h-96" src="box.svg" alt="not empty"/></div> 
@@ -116,16 +144,14 @@ const Cart = () => {
 
             </form>
             <div className="mx-10 text-xl">Total: ${total}.00</div>
-            {
-                payment 
-                ? <PaypalBtn total={total} address={address} mobile={mobile} state={state} dispatch={dispatch}/>
-                : <Link href={auth.user ? '#!': '/signin'}>
+           
+                 <Link href={auth.user ? '#!': '/signin'}>
                     <button onClick={handlePayment} className="transition ease-in duration-300 inline-flex items-center text-sm font-medium mb-2 md:mb-0 bg-green-500 px-5 py-2 hover:shadow-lg tracking-wider text-white rounded-full hover:bg-green-600">
                         Checkout
                     </button> 
                   </Link>      
 
-            }
+            
 
               
         </div>
