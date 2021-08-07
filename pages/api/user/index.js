@@ -18,8 +18,8 @@ const uploadInfo = async (req,res) => {
     try {
         const result = await auth(req,res)
         const { name,avatar} = req.body
-
-        const newUser = await Users.findOneAndUpdate({_id: result._id},{name, avatar})
+        console.log(result)
+        const newUser = await Users.findOneAndUpdate({_id: result.id},{name, avatar})
 
         res.json({
             msg: "Update Success",

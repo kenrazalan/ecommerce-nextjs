@@ -1,6 +1,31 @@
 import Link from 'next/link'
+import { updateItem } from '../store/Action'
+import { patchData } from '../utils/fetchData'
+import PaypalBtn from './PaypalBtn'
 
-const OrderDetail = ({orderDetail}) => {
+const OrderDetail = ({ orderDetail, dispatch, state}) => {
+    const { auth, orders } = state
+
+    const handleDelivered = (order) => {
+        dispatch({ type: 'NOTIFY', payload: {loading: true}})
+        patchData(`order/delivered/${order._id}`, null , auth.token)
+        .then(res => {
+
+            const { paid, dateOfPayment, method, delivered} = res.result
+
+            if(res.err) return dispatch({ type: 'NOTIFY', payload: {error: res.err}})
+
+            dispatch(updateItem(orders, order._id, {
+                ...order, 
+                paid, 
+                dateOfPayment, 
+                method, 
+                delivered
+            },'ADD_ORDERS'))
+            return dispatch({ type: 'NOTIFY', payload: {success: true}})
+        })
+    }
+    if(!auth.user) return null
     return(
         <div className="flex justify-center">
         {orderDetail.map(item => (
@@ -12,15 +37,29 @@ const OrderDetail = ({orderDetail}) => {
                     <p>Email: {item.user.email}</p>
                     <p>Address: {item.address}</p>
                     <p>Mobile: {item.mobile}</p>
-                    <div className={`${item.delivered ? 'bg-green-500' : ' bg-red-500'} rounded-sm flex justify-center`}>
+                    <div className={`${item.delivered ? 'bg-green-500' : ' bg-red-500'} rounded-sm flex justify-between items-center px-4 p-2`}>
                         {
                             item.delivered ? `Delivered on ${item.updatedAt}` : 'Not delivered'
                         }
+                        {
+                            auth.user.role ==='admin' && !item.delivered &&
+                            <button className="transition ease-in duration-300 inline-flex items-center text-sm font-medium mb-2 md:mb-0 bg-gray-700 px-5 py-2 hover:shadow-lg tracking-wider text-white rounded-full hover:bg-gray-900"
+                                    onClick={() => handleDelivered(item)}>
+                                Mark as delivered
+                            </button>
+                        }
                     </div>
                     <h3>Payment</h3>
-                    <div className={`${item.delivered ? 'bg-green-500' : ' bg-red-500'} rounded-sm flex justify-center`}>
+                    {
+                        item.method && <h4>Method: <em>{item.method}</em></h4>
+                    }
+                    {
+                        item.paymentId && <h4>Payment ID: <em>{item.paymentId}</em></h4>
+                    }
+                    
+                    <div className={`${item.paid ? 'bg-green-500' : ' bg-red-500'} rounded-sm flex justify-center p-2`}>
                         {
-                            item.paid ? `Delivered on ${item.dateOfPayment}` : 'Not Paid'
+                            item.paid ? `Paid on ${item.dateOfPayment}` : 'Not Paid'
                         }
                     </div>
                     <div>
@@ -42,7 +81,18 @@ const OrderDetail = ({orderDetail}) => {
                         }
                     </div>
                 </div>
+                    <div>
+                        <h2 className="py-2">Total: ₱ {item.total}.00</h2>
+                        { !item.paid && auth.user.role !== 'admin' &&
+                        <div className="p-4">
+                            <PaypalBtn order={item}/> 
+                        </div>                            
+                        }
+
+                        
+                    </div>
             </div>
+
         ))}
     </div>
     )

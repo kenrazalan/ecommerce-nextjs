@@ -16,6 +16,20 @@ function Header() {
         dispatch({type: "AUTH", payload: {}})
         dispatch({type: "NOTIFY", payload: {success: 'Logged out'}})
     }
+
+    const adminRouter = () => (
+      <>
+          <Link href="/users">
+            <a className="nav-link cursor-pointer" >Users</a>      
+          </Link>
+          <Link href="/create">
+            <a className="nav-link cursor-pointer" >Products</a>      
+          </Link>
+          <Link href="/categories">
+            <a className="nav-link cursor-pointer" >Categories</a>      
+          </Link>
+      </>
+    )
     const loggedRouter = () => (
         <>
         <img className="cursor-pointer" src={auth.user.avatar} alt="profile" 
@@ -26,6 +40,9 @@ function Header() {
             <a className="nav-link cursor-pointer" >Profile</a>      
           </Link>
         </li>
+        {
+          auth.user.role ==='admin' && adminRouter()
+        }
         <li className="nav-item">
           <Link href="/orders">
             <a className="nav-link cursor-pointer" >Orders</a>      

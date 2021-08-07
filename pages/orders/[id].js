@@ -17,6 +17,7 @@ const DetailOrder = () => {
         const newArr = orders.filter(order => order._id === router.query.id)
         setOrderDetail(newArr)
     },[orders])
+    if(!auth.user) return null
     return(
         <div>
             <Head><title>Order Details</title></Head>
@@ -24,7 +25,7 @@ const DetailOrder = () => {
                 <button onClick={() => router.back()} className="transition ease-in duration-300 inline-flex items-center text-sm font-medium mb-2 md:mb-0 bg-gray-700 px-5 py-2 hover:shadow-lg tracking-wider text-white rounded-full hover:bg-gray-900">
                     <span>Back</span>
                 </button>
-                <OrderDetail orderDetail={orderDetail}/>
+                <OrderDetail orderDetail={orderDetail} auth={auth} dispatch={dispatch} state={state} />
             </div>
         </div>
     )

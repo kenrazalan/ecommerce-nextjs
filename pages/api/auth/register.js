@@ -30,7 +30,7 @@ const register = async (req,res) => {
             name, email ,password:passwordHashed, cf_password
         })
         await newUser.save()
-        res.json({msg:"Register Success"})
+        res.json({msg:"Registered Success"})
     }catch(err) {
         res.status(500).json({err: err.message})
     }
