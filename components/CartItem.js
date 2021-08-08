@@ -1,17 +1,24 @@
 import Link from "next/link"
 import { useState } from "react"
-import { decrease, increase } from "../store/Action"
+import { decrease, deleteItem, increase } from "../store/Action"
 import Modal from "./Modal"
 
 
 const CartItem = ({item,dispatch,cart}) => {
     const [toggle,setToggle] = useState(false)
-    console.log(item)
+
+    const handleSubmit = () => {
+        dispatch(deleteItem(cart, item._id, 'ADD_CART'))
+    }
+    
     return(
         <>
         {
             toggle && (
-                 <Modal toggle={toggle} setToggle={setToggle} item={item} cart={cart}/>
+                 <Modal toggle={toggle} 
+                        setToggle={setToggle} 
+                        message="Are you sure you want to remove this item to cart."
+                        handleSubmit={handleSubmit}/>
             )
         }
        

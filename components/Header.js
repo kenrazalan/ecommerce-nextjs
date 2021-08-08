@@ -15,6 +15,7 @@ function Header() {
         localStorage.removeItem('firstlogin')
         dispatch({type: "AUTH", payload: {}})
         dispatch({type: "NOTIFY", payload: {success: 'Logged out'}})
+        return router.push('/signin')
     }
 
     const adminRouter = () => (
